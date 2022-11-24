@@ -11,7 +11,7 @@ describe('Users', () => {
         name: 'John Doe',
         username: 'johndoe'
       })
-    expect(201);
+      .expect(201);
 
     expect(validate(response.body.id)).toBe(true);
 
@@ -37,7 +37,6 @@ describe('Users', () => {
         username: 'johndoe'
       })
       .expect(400);
-
     expect(response.body.error).toBeTruthy();
   });
 });

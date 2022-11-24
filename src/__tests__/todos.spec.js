@@ -4,6 +4,7 @@ const { validate } = require('uuid');
 const app = require('../');
 
 describe('Todos', () => {
+
   it("should be able to list all user's todo", async () => {
     const userResponse = await request(app)
       .post('/users')
@@ -37,7 +38,7 @@ describe('Todos', () => {
     const userResponse = await request(app)
       .post('/users')
       .send({
-        name: 'John Doe',
+        name: 'John Doe2',
         username: 'user2'
       });
 
@@ -65,8 +66,8 @@ describe('Todos', () => {
     const userResponse = await request(app)
       .post('/users')
       .send({
-        name: 'John Doe',
-        username: 'user7'
+        name: 'John Doe3',
+        username: 'user3'
       });
 
     const todoDate = new Date();
@@ -96,46 +97,25 @@ describe('Todos', () => {
     const getAllTodosResponse = await request(app)
       .get((`/todos/`))
       .set('username', userResponse.body.username);
-    
+
     expect(
       getAllTodosResponse.body.find(
-        (todo)=>todo.id === todoResponse.body.id
+        (todo) => todo.id === todoResponse.body.id
       ))
-    .toMatchObject({
-      title: 'update title',
-      deadline: todoDate.toISOString(),
-      done: false
-    });
-  });
-
-  it('should not be able to update a non existing todo', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user8'
+      .toMatchObject({
+        title: 'update title',
+        deadline: todoDate.toISOString(),
+        done: false
       });
 
-    const todoDate = new Date();
-
-    const response = await request(app)
-      .put('/todos/invalid-todo-id')
-      .send({
-        title: 'update title',
-        deadline: todoDate
-      })
-      .set('username', userResponse.body.username)
-      .expect(404);
-
-    expect(response.body.error).toBeTruthy();
   });
 
   it('should be able to mark a todo as done', async () => {
     const userResponse = await request(app)
       .post('/users')
       .send({
-        name: 'John Doe',
-        username: 'user3'
+        name: 'John Doe4',
+        username: 'user4'
       });
 
     const todoDate = new Date();
@@ -158,12 +138,34 @@ describe('Todos', () => {
     });
   });
 
+  it('should not be able to update a non existing todo', async () => {
+    const userResponse = await request(app)
+      .post('/users')
+      .send({
+        name: 'John Doe5',
+        username: 'user5'
+      });
+
+    const todoDate = new Date();
+
+    const response = await request(app)
+      .put('/todos/invalid-todo-id')
+      .send({
+        title: 'update title',
+        deadline: todoDate
+      })
+      .set('username', userResponse.body.username)
+      .expect(404);
+
+    expect(response.body.error).toBeTruthy();
+  });
+
   it('should not be able to mark a non existing todo as done', async () => {
     const userResponse = await request(app)
       .post('/users')
       .send({
-        name: 'John Doe',
-        username: 'user4'
+        name: 'John Doe6',
+        username: 'user6'
       });
 
     const response = await request(app)
@@ -178,8 +180,8 @@ describe('Todos', () => {
     const userResponse = await request(app)
       .post('/users')
       .send({
-        name: 'John Doe',
-        username: 'user5'
+        name: 'John Doe7',
+        username: 'user7'
       });
 
     const todoDate = new Date();
@@ -208,8 +210,8 @@ describe('Todos', () => {
     const userResponse = await request(app)
       .post('/users')
       .send({
-        name: 'John Doe',
-        username: 'user6'
+        name: 'John Doe8',
+        username: 'user8'
       });
 
     const response = await request(app)
@@ -219,4 +221,5 @@ describe('Todos', () => {
 
     expect(response.body.error).toBeTruthy();
   });
+
 });
