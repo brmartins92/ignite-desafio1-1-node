@@ -18,7 +18,8 @@ function checksExistsUserAccount(request, response, next) {
   })
 
   if (existName) {
-    next();
+    request.username = username;
+    return next();
   } else {
     response.status(400).json({
       error: 'username invalid'
@@ -31,7 +32,7 @@ app.post('/users', (request, response) => {
 
   const { name, username } = request.body;
   const existName = users.find((user) => {
-    if (user.name === name) return user;
+    if (user.username === username) return user;
   })
 
   if (existName) response.status(400).json({
@@ -51,7 +52,7 @@ app.post('/users', (request, response) => {
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
-  const username = request.headers.username;
+  const username = request.username;
   const existUserId = users.findIndex(user => user.username === username)
   response.status(201).json(users[existUserId].todos);
 });
@@ -59,7 +60,7 @@ app.get('/todos', checksExistsUserAccount, (request, response) => {
 app.post('/todos', checksExistsUserAccount, (request, response) => {
 
   const { title, deadline } = request.body;
-  const username = request.headers.username;
+  const username = request.username;
 
   const existUserId = users.findIndex(user => user.username === username)
   const todo = {
@@ -77,7 +78,7 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 
   const todoId = request.params.id;
-  const username = request.headers.username;
+  const username = request.username;
   const { title, deadline } = request.body;
 
   const existUserId = users.findIndex(user => user.username === username)
@@ -97,7 +98,7 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
 
   const todoId = request.params.id;
-  const username = request.headers.username;
+  const username = request.username;
   const { title, deadline } = request.body;
 
   const existUserId = users.findIndex(user => user.username === username)
@@ -116,7 +117,7 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   const todoId = request.params.id;
-  const username = request.headers.username;
+  const username = request.username;
   const { title, deadline } = request.body;
 
   const existUserId = users.findIndex(user => user.username === username)
